@@ -25,15 +25,39 @@ function createDatabase() {
 
   var myDay = [
     {
-      hour: "17",
-      task: "sleep",
+      hour: "09",
+      task: "",
     },
     {
-      hour: "18",
+      hour: "10",
       task: "eat",
     },
     {
+      hour: "11",
+      task: "code",
+    },
+    {
       hour: "12",
+      task: "code",
+    },
+    {
+      hour: "13",
+      task: "code",
+    },
+    {
+      hour: "14",
+      task: "code",
+    },
+    {
+      hour: "15",
+      task: "code",
+    },
+    {
+      hour: "16",
+      task: "code",
+    },
+    {
+      hour: "17",
       task: "code",
     }
   ]
@@ -54,8 +78,6 @@ function createDatabase() {
 
 
 
-
-
 // Loop through the data that was created above and render the data by showing it in the html
 function displayWorkPlanner() {
 
@@ -65,50 +87,81 @@ function displayWorkPlanner() {
 
   var output = "";
 
-  var retrievedObject = localStorage.getItem('myDay');
-  console.log("retrieved", retrievedObject);
+  var savedDay = JSON.parse(localStorage.getItem('myDay'));
 
-  var schedule = JSON.parse(retrievedObject)
+  //check new add task
+  if (savedDay) {
+    myDay = savedDay;
+  }
 
+  console.log("savedDay", savedDay);
 
-  for (var i = 0; i < schedule.length; i++) {
+  for (var i = 0; i < savedDay.length; i++) {
 
-    var getHour = schedule[i].hour;
-    var getTask = schedule[i].task;
+    var getHour = savedDay[i].hour;
+    var getTask = savedDay[i].task;
 
-    console.log(getHour);
+    console.log("check", getHour);
+
+    //form for each time table
+    var timeTable = $('<form>').attr({ "class": "row", "id": "form_" + getHour });
+
+    //render each hour
+    var hourArea = $('<div>').text(getHour).attr({ "class": "col-md-2 hour", "id": "div_" + getHour });
+
+    //each task
+    var taskArea = $('<textarea>').text(getTask).attr({ "id": "textarea_" + getHour });
+
+    //creates save button
+    var buttonIcon = $("<i class='far fa-save fa-lg'></i>");
+    var saveButton = $("<button>").attr({ "class": "col-md-1 saveBtn", "id": "Btn_" + getHour });
+
 
     //check if hour is past, present future
     var momentPresent = moment().hour();
     var momentCheck = getHour;
 
     if (momentCheck < momentPresent) {
-      $('#task-area').css("background", "red");
-
-      console.log("past");
-
-    } else if (momentCheck = momentPresent) {
-      $('#task-area').css("background", "grey");
-      console.log("present");
+      taskArea.attr({ "class": "col-md-9 description p-0 past" });
+    } else if (momentCheck == momentPresent) {
+      taskArea.attr({ "class": "col-md-9 description p-0 present" });
     } else {
-      $('#task-area').css("background", "blue");
-      console.log("future");
+      taskArea.attr({ "class": "col-md-9 description p-0 future" });
     }
+    saveButton.append(buttonIcon);
+    timeTable.append(hourArea, taskArea, saveButton)
 
-    output = '<li class="row-agenda">' + getHour + '<textarea id="task-area">' + getTask + '</textarea>' + '<button id="' + getHour + '" class="save-button">' + '<i class="far fa-save fa-lg"></i>' + "add" + '</button>' + '</li>';
-    $(".container").append(output)
+    $(".container").append(timeTable);
 
+    $("#Btn_" + getHour).click(
+      function () {
+        var id = this.id;
+        alert("checking button " + id);
+
+        saveWorkPlanner();
+        console.log("saveWorkPlanner", saveWorkPlanner);
+
+      }
+    );
 
   }
 
-  $(".save-button").click(
-    function () {
-      var id = this.id;
-      alert("checking button " + id);
+}
+
+$(".saveBtn").click(
+  function () {
+    var id = this.id;
+    alert("checking button " + id);
+
+    saveWorkPlanner();
+    console.log("saveWorkPlanner", saveWorkPlanner);
+
+  }
+);
 
 
-    }
-  );
+function saveWorkPlanner() {
+  localStorage.setItem('myDay', JSON.stringify(myDay));
 }
 
 
