@@ -4,8 +4,6 @@
 ## Goal 
 <p> AS AN employee with a busy schedule. I WANT to add important events to a daily planner. SO THAT I can manage my time effectively.</p>
 
-
-
 ## Contents
 Files Name |
 -----------|
@@ -33,9 +31,9 @@ script.js  |
 * [Chrome DevTools] (https://developers.google.com/web/tools/chrome-devtools) - The editor pages on-the-fly and problem diagnostic.
 * [W3C MarkUp Validator] (https://validator.w3.org/) - The markup validation service (HTML, XHTML) of web documents.
 * [GetBootstrap] (https://getbootstrap.com/) - Open-source CSS framework directed at responsive, mobile-first front-end web development. 
-
+* [Moment JS] (http://momentjs.com) - JavaScript library that removes the need to use the native JavaScript Date object directly.
 
 ## Screenshot
-
+![Work-Day-Scheduler](https://user-images.githubusercontent.com/7066137/93299625-b2369500-f838-11ea-842a-6e23d6eb368d.png)
 
 ### Link to the App

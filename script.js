@@ -2,26 +2,26 @@
 $(document).ready(
 
   function () {
+
     createDatabase()
-    displayWorkPlanner()
+
+    displayDayPlanner()
   }
 );
 
+//Functon to get current date, time and to display in the top page using moment js
 function getCurrentDate() {
 
-  //get current date and display in the top page using moment js
-  var currentDate = moment().format('dddd, MMMM Do');
+  var currentDate = moment().format('dddd, MMMM Do YYYY');
   $("#currentDay").text(currentDate);
+  return (currentDate);
 
 }
 
-
+//This function to create database for timetable
 function createDatabase() {
 
-  //define data structures for day planner 
-  //check if the stored data is today date if not empty data
-  //create new element if empty in localstorage 
-  getCurrentDate();
+  var todayDate = getCurrentDate();
 
   var myDay = [
     {
@@ -30,86 +30,66 @@ function createDatabase() {
     },
     {
       hour: "10",
-      task: "eat",
+      task: "",
     },
     {
       hour: "11",
-      task: "code",
+      task: "",
     },
     {
       hour: "12",
-      task: "code",
+      task: "",
     },
     {
       hour: "13",
-      task: "code",
+      task: "",
     },
     {
       hour: "14",
-      task: "code",
+      task: "",
     },
     {
       hour: "15",
-      task: "code",
+      task: "",
     },
     {
       hour: "16",
-      task: "code",
+      task: "",
     },
     {
       hour: "17",
-      task: "code",
+      task: "",
     }
   ]
 
-  var showDate = localStorage.setItem('myDay', JSON.stringify(myDay));
-
-
-  if (showDate == null) {
-
-    console.log(myDay.hour);
-
-    //create data to store each task for every hour
+  var dataToday = localStorage.getItem(todayDate)
+  if (dataToday == null) {
+    localStorage.setItem(todayDate, JSON.stringify(myDay));
   }
-
-
 
 }
 
 
+//displayDayPlanner function renders the HTML to display the timetable 
+function displayDayPlanner() {
 
-// Loop through the data that was created above and render the data by showing it in the html
-function displayWorkPlanner() {
+  var currentDate = getCurrentDate();
 
-  //get the current date to render stored date 
-  //create each html tag (p,textarea,button) and loop for each hour
-  //make sure to make the add / save button work (create new function that render from data id)
+  var savedDay = JSON.parse(localStorage.getItem(currentDate));
 
-  var output = "";
-
-  var savedDay = JSON.parse(localStorage.getItem('myDay'));
-
-  //check new add task
-  if (savedDay) {
-    myDay = savedDay;
-  }
-
-  console.log("savedDay", savedDay);
 
   for (var i = 0; i < savedDay.length; i++) {
 
     var getHour = savedDay[i].hour;
     var getTask = savedDay[i].task;
 
-    console.log("check", getHour);
+    //create div row
+    var timeTable = $('<div>').attr({ "class": "row", "id": "form_" + getHour });
 
-    //form for each time table
-    var timeTable = $('<form>').attr({ "class": "row", "id": "form_" + getHour });
-
-    //render each hour
+    //create hour area
     var hourArea = $('<div>').text(getHour).attr({ "class": "col-md-2 hour", "id": "div_" + getHour });
 
-    //each task
+    //create textarea
     var taskArea = $('<textarea>').text(getTask).attr({ "id": "textarea_" + getHour });
 
     //creates save button
@@ -117,7 +97,7 @@ function displayWorkPlanner() {
     var saveButton = $("<button>").attr({ "class": "col-md-1 saveBtn", "id": "Btn_" + getHour });
 
 
-    //check if hour is past, present future
+    //check past, present.future
     var momentPresent = moment().hour();
     var momentCheck = getHour;
 
@@ -128,18 +108,21 @@ function displayWorkPlanner() {
     } else {
       taskArea.attr({ "class": "col-md-9 description p-0 future" });
     }
+
     saveButton.append(buttonIcon);
     timeTable.append(hourArea, taskArea, saveButton)
 
     $(".container").append(timeTable);
 
+    //Function to handle events where save button is clicked
     $("#Btn_" + getHour).click(
       function () {
         var id = this.id;
-        alert("checking button " + id);
 
-        saveWorkPlanner();
-        console.log("saveWorkPlanner", saveWorkPlanner);
+        console.log(id);
+
+        //Calling saveWorkPlanner function to save textarea
+        saveWorkPlanner(id);
 
       }
     );
@@ -148,20 +131,31 @@ function displayWorkPlanner() {
 
 }
 
-$(".saveBtn").click(
-  function () {
-    var id = this.id;
-    alert("checking button " + id);
 
-    saveWorkPlanner();
-    console.log("saveWorkPlanner", saveWorkPlanner);
+//Function to save textarea
+function saveWorkPlanner(id) {
+
+  var hour_id = id.split("_")[1]
+
+  var textToSave = $("#textarea_" + hour_id).val();
+
+  var currentDate = getCurrentDate();
+
+  var savedDay = JSON.parse(localStorage.getItem(currentDate));
+
+  //loop updated local storage
+  for (var i = 0; i < savedDay.length; i++) {
+
+    var getHour = savedDay[i].hour;
+
+    if (getHour == hour_id) {
+      savedDay[i].task = textToSave;
+      localStorage.setItem(currentDate, JSON.stringify(savedDay));
+      break;
+    }
 
   }
-);
 
-
-function saveWorkPlanner() {
-  localStorage.setItem('myDay', JSON.stringify(myDay));
 }
 
 
