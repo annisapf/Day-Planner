@@ -37,3 +37,4 @@ script.js  |
 ![Work-Day-Scheduler](https://user-images.githubusercontent.com/7066137/93299625-b2369500-f838-11ea-842a-6e23d6eb368d.png)
 
 ### Link to the App
+<a href="https://annisapf.github.io/Day-Planner/">The URLs of the deployed applications in GitHub</a><hr>
