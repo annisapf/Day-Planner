@@ -119,7 +119,7 @@ function displayDayPlanner() {
       function () {
         var id = this.id;
 
-        console.log(id);
+        alert("Save new data!");
 
         //Calling saveWorkPlanner function to save textarea
         saveWorkPlanner(id);
